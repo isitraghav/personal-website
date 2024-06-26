@@ -45,7 +45,7 @@
 			<span class="sr-only">GitHub</span>
 		</a>
 		<a
-			href="https://x.com/isitraghav"
+			href="https://instagram.com/isitraghav"
 			target="_blank"
 			class="inline-flex size-8 items-center justify-center text-stone-500 hover:text-stone-700"
 		>
