@@ -4,7 +4,7 @@ import parseMD from 'parse-md';
 import { readFileSync } from 'fs';
 
 export async function load({ params }) {
-	const articlesDir = path.join('./');
+	const articlesDir = path.join('articles');
 
 	const files = await readdir(articlesDir);
 	let fileData = [];
