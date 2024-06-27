@@ -17,12 +17,12 @@
 		<p>Some of the more notable projects I've built or helped build and maintain are:</p>
 		<ul>
 			{#each repos as repo}
-				<li><a href={`https://github.com/isitraghav/${repo}`}>{repo}</a></li>
+				<li><a href={`https://github.com/isitraghav/${repo}`} target="_blank">{repo}</a></li>
 			{/each}
 		</ul>
 		<p>
 			I find fulfillment in sharing what I learn with others, mostly through written content, which
-			you can find at <a href="/notes">this link</a>.
+			you can find at <a href="/articles">this link</a>.
 		</p>
 	</section>
 </main>
