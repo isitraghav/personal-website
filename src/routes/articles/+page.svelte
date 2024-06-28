@@ -16,6 +16,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Articles</title>
+</svelte:head>
+
 <div class="mx-auto mb-12 w-full text-center">
 	<h1 class="text-3xl font-medium">Articles</h1>
 	<p class="mt-3 text-balance text-xl text-stone-600">A collection of the articles I've written.</p>

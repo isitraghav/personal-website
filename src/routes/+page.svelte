@@ -2,6 +2,10 @@
 	let repos = ['youtube-summarise-ai', 'youtube-dl', 'throw-me', 'live-loc', 'artifact'];
 </script>
 
+<svelte:head>
+	<title>Raghav Yadav</title>
+</svelte:head>
+
 <main class="py-6 md:py-10">
 	<section
 		class="prose prose-stone mt-4 md:prose-lg prose-a:underline prose-a:decoration-stone-400 prose-a:underline-offset-4 prose-li:marker:text-stone-400"
