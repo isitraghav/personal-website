@@ -18,6 +18,7 @@
 
 <svelte:head>
 	<title>Articles</title>
+	<meta name="description" content="A collection of the articles I've written." />
 </svelte:head>
 
 <div class="mx-auto mb-12 w-full text-center">

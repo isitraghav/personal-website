@@ -4,6 +4,10 @@
 
 <svelte:head>
 	<title>Raghav Yadav</title>
+	<meta
+		name="description"
+		content="A place for me on the internet, a personal website to share and propagate what i learnt"
+	/>
 </svelte:head>
 
 <main class="py-6 md:py-10">
