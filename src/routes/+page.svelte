@@ -1,5 +1,12 @@
 <script>
-	let repos = ['youtube-summarise-ai', 'youtube-dl', 'throw-me', 'live-loc', 'artifact'];
+	let repos = [
+		'reportit',
+		'artifact',
+		'live-loc',
+		'throw-me',
+		'youtube-summarise-ai',
+		'youtube-dl'
+	];
 </script>
 
 <svelte:head>
