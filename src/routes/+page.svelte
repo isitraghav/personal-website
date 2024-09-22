@@ -1,11 +1,10 @@
 <script>
 	let repos = [
 		'reportit',
+		'KrishiMitra',
 		'artifact',
 		'live-loc',
 		'throw-me',
-		'youtube-summarise-ai',
-		'youtube-dl'
 	];
 </script>
 
