@@ -9,7 +9,6 @@
 		try {
 			const res = await axios.get('https://dev.to/api/articles?username=isitraghav');
 			articles = res.data;
-			console.log(articles);
 		} catch (error) {
 			console.error('Error fetching articles:', error);
 		}
