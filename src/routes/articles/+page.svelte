@@ -5,14 +5,14 @@
 
 	let articles = [];
 
-	let posts = ['hello-world.md'];
-
-	onMount(() => {
-		posts.forEach((p) => {
-			axios.get(`${location.origin}/posts/${p}`).then((r) => {
-				articles = [...articles, { ...parseMD(r.data).metadata, name: p }];
-			});
-		});
+	onMount(async () => {
+		try {
+			const res = await axios.get('https://dev.to/api/articles?username=isitraghav');
+			articles = res.data;
+			console.log(articles);
+		} catch (error) {
+			console.error('Error fetching articles:', error);
+		}
 	});
 </script>
 
@@ -28,13 +28,13 @@
 
 <div class="flex flex-col">
 	{#each articles as article}
-		<a href="/articles/{article.name.split('.')[0]}" class="mb-6 p-3">
+		<a href="/articles/{article.slug}" class="mb-6 p-3">
 			<div class="text-lg flex">
 				<div>
 					{article.title}
 				</div>
 				<div class="ml-auto text-sm text-stone-600">
-					{new Date(article.published).toLocaleDateString()}
+					{new Date(article.created_at).toLocaleDateString()}
 				</div>
 			</div>
 			<div class="text-sm text-stone-600/85">

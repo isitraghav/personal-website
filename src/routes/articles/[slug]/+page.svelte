@@ -5,15 +5,17 @@
 	import axios from 'axios';
 	import parseMD from 'parse-md';
 
+	import { page } from '$app/stores';
+
 	let sanitized = '';
 	let title = '';
 	let description = '';
 	onMount(() => {
-		axios.get(`${location.href.replace('articles', 'posts')}.md`).then((r) => {
-			title = parseMD(r.data).metadata['title'];
-			description = parseMD(r.data).metadata['description'];
-
-			sanitized = insane(marked(parseMD(r.data).content));
+		axios.get(`https://dev.to/api/articles/isitraghav/${$page.params.slug}`).then((res) => {
+			const article = res.data;
+			title = article.title;
+			description = article.description;
+			sanitized = article.body_html;
 		});
 	});
 </script>
@@ -22,4 +24,7 @@
 	<title>{title}</title>
 	<meta name="description" content={description} />
 </svelte:head>
+<div>
+	<h1 class="text-3xl">{title}</h1>
+</div>
 {@html sanitized}
