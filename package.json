@@ -1,33 +1,28 @@
 {
-	"name": "personal-website",
-	"version": "0.0.1",
-	"private": true,
-	"license": "GPL-3.0-only",
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview",
-		"lint": "prettier --check .",
-		"format": "prettier --write ."
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-auto": "^3.0.0",
-		"@sveltejs/kit": "^2.0.0",
-		"@sveltejs/vite-plugin-svelte": "^3.0.0",
-		"@tailwindcss/typography": "^0.5.13",
-		"autoprefixer": "^10.4.19",
-		"postcss": "^8.4.38",
-		"prettier": "^3.1.1",
-		"prettier-plugin-svelte": "^3.1.2",
-		"svelte": "^4.2.7",
-		"tailwindcss": "^3.4.4",
-		"vite": "^5.0.3"
-	},
-	"type": "module",
-	"dependencies": {
-		"axios": "^1.7.2",
-		"insane": "^2.6.2",
-		"marked": "^13.0.1",
-		"parse-md": "^3.0.3"
-	}
+  "name": "personal-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "gsap": "^3.14.2",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.0",
+    "@types/node": "^20.19.33",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "enhanced-resolve": "^5.19.0",
+    "eslint": "^9.39.3",
+    "eslint-config-next": "^16.1.6",
+    "tailwindcss": "^4.2.0",
+    "typescript": "5.9.3"
+  }
 }
