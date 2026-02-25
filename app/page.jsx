@@ -1,13 +1,37 @@
-import Image from "next/image";
-import Glaze from "../components/Glaze"
+import Glaze from "../components/Glaze";
+import MusicPlayer from "../components/MusicPlayer";
+
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <Glaze />
-
-      <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-        <h1 className="text-4xl font-bold">Hi</h1>
+    <main
+      style={{
+        position: "relative",
+        background: "#000",
+        minHeight: "600vh",
+        overflow: "hidden",
+      }}
+    >
+      {/* Glaze bg — fixed, never moves */}
+      <div
+        style={{
+          position: "fixed",
+          top: "40px",
+          left: "40px",
+          right: "40px",
+          bottom: "40px",
+          zIndex: 0,
+          borderRadius: "24px",
+          overflow: "hidden",
+          pointerEvents: "none",
+        }}
+      >
+        <Glaze />
       </div>
-    </div>
+
+      {/* Music player + content panel */}
+      <div style={{ position: "relative", zIndex: 10 }}>
+        <MusicPlayer />
+      </div>
+    </main>
   );
 }

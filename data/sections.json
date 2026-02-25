@@ -1,0 +1,82 @@
+{
+    "sections": [
+        {
+            "title": "EXPERIENCE",
+            "artist": "Raghav",
+            "duration": 323,
+            "albumArt": "https://c.saavncdn.com/224/RUAB-Hindi-2023-20230804141008-500x500.jpg",
+            "items": [
+                {
+                    "role": "Software Engineer",
+                    "company": "Company Name",
+                    "period": "2024 – Present",
+                    "description": "Building production-grade web applications and APIs"
+                },
+                {
+                    "role": "Frontend Developer",
+                    "company": "Previous Co.",
+                    "period": "2023 – 2024",
+                    "description": "Designed and shipped modern React interfaces"
+                },
+                {
+                    "role": "Freelance Developer",
+                    "company": "Self-employed",
+                    "period": "2022 – 2023",
+                    "description": "Full-stack projects for startups and small businesses"
+                }
+            ]
+        },
+        {
+            "title": "PROJECTS",
+            "artist": "Raghav",
+            "duration": 198,
+            "albumArt": "https://i.scdn.co/image/ab67616d0000b27325c28f3c9fbdbab1a88dd619",
+            "items": [
+                {
+                    "role": "Personal Website",
+                    "company": "Next.js + GSAP",
+                    "period": "2024",
+                    "description": "This portfolio site with morphing music player navigation"
+                },
+                {
+                    "role": "E-Commerce Platform",
+                    "company": "React + Node.js",
+                    "period": "2024",
+                    "description": "Full-stack marketplace with payment integration"
+                },
+                {
+                    "role": "AI Dashboard",
+                    "company": "Python + React",
+                    "period": "2023",
+                    "description": "Real-time analytics with ML-powered insights"
+                }
+            ]
+        },
+        {
+            "title": "FINDS",
+            "artist": "Raghav",
+            "duration": 215,
+            "albumArt": "https://c.saavncdn.com/801/Kesariya-From-Brahmastra-Hindi-2022-20220717092820-500x500.jpg",
+            "items": [
+                {
+                    "role": "GSAP ScrollTrigger",
+                    "company": "Animation Library",
+                    "period": "greensock.com",
+                    "description": "Incredible scroll-driven animation toolkit"
+                },
+                {
+                    "role": "Lenis",
+                    "company": "Smooth Scroll",
+                    "period": "lenis.dev",
+                    "description": "Buttery smooth inertia-based scrolling"
+                },
+                {
+                    "role": "Lucide Icons",
+                    "company": "Icon Library",
+                    "period": "lucide.dev",
+                    "description": "Beautiful, consistent open-source icon set"
+                }
+            ]
+        }
+    ]
+}
