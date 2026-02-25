@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -13,7 +13,7 @@ import {
     Briefcase,
     FolderGit2,
     Sparkles,
-    ChevronRight,
+    Music2,
 } from "lucide-react";
 import sectionData from "../data/sections.json";
 
@@ -22,58 +22,87 @@ gsap.registerPlugin(ScrollTrigger);
 const sections = sectionData.sections;
 const SECTION_ICONS = [Briefcase, FolderGit2, Sparkles];
 
+/* Total items across all sections, used for scroll math */
+const totalItems = sections.reduce((sum, s) => sum + s.items.length, 0);
+
 function formatTime(s) {
     const m = Math.floor(s / 60);
     const sec = Math.floor(s % 60);
     return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
-/* ── Content Panel Item ────────────────────────────────────── */
-function SectionItem({ item, index }) {
+/* ── Playlist Item ─────────────────────────────────────────── */
+function PlaylistItem({ item, index, isActive, isPlayed }) {
     return (
         <div
             style={{
                 display: "flex",
-                alignItems: "flex-start",
+                alignItems: "center",
                 gap: "12px",
-                padding: "14px 0",
-                borderBottom: "1px solid rgba(255,255,255,0.06)",
-                cursor: "pointer",
-                transition: "background 0.2s",
+                padding: "10px 14px",
+                borderRadius: "12px",
+                background: isActive ? "rgba(255,255,255,0.08)" : "transparent",
+                transition: "all 0.35s ease",
+                opacity: isActive ? 1 : isPlayed ? 0.6 : 0.35,
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
         >
-            <div
-                style={{
-                    width: "32px",
-                    height: "32px",
-                    borderRadius: "8px",
-                    background: "rgba(255,255,255,0.06)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                    marginTop: "2px",
-                    color: "rgba(255,255,255,0.5)",
-                    fontSize: "13px",
-                    fontWeight: 600,
-                }}
-            >
-                {index + 1}
+            {/* Track number or playing indicator */}
+            <div style={{
+                width: "24px",
+                textAlign: "center",
+                fontSize: "13px",
+                fontWeight: 500,
+                color: isActive ? "#fff" : "rgba(255,255,255,0.4)",
+                fontVariantNumeric: "tabular-nums",
+                flexShrink: 0,
+                transition: "color 0.35s ease",
+            }}>
+                {isActive ? (
+                    <Music2 size={14} color="#fff" />
+                ) : (
+                    index + 1
+                )}
             </div>
+
+            {/* Info */}
             <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ margin: 0, fontSize: "14px", fontWeight: 600, color: "#fff", lineHeight: 1.3 }}>
+                <p style={{
+                    margin: 0,
+                    fontSize: "14px",
+                    fontWeight: isActive ? 600 : 400,
+                    color: isActive ? "#fff" : "rgba(255,255,255,0.7)",
+                    lineHeight: 1.3,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    transition: "all 0.35s ease",
+                }}>
                     {item.role}
                 </p>
-                <p style={{ margin: "2px 0 0", fontSize: "12px", color: "rgba(255,255,255,0.45)", fontWeight: 400 }}>
-                    {item.company} · {item.period}
-                </p>
-                <p style={{ margin: "4px 0 0", fontSize: "12px", color: "rgba(255,255,255,0.3)", fontWeight: 400, lineHeight: 1.4 }}>
-                    {item.description}
+                <p style={{
+                    margin: "1px 0 0",
+                    fontSize: "12px",
+                    color: isActive ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.3)",
+                    fontWeight: 400,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    transition: "color 0.35s ease",
+                }}>
+                    {item.company}
                 </p>
             </div>
-            <ChevronRight size={16} color="rgba(255,255,255,0.2)" style={{ flexShrink: 0, marginTop: "8px" }} />
+
+            {/* Duration-like text */}
+            <span style={{
+                fontSize: "12px",
+                color: isActive ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)",
+                fontVariantNumeric: "tabular-nums",
+                flexShrink: 0,
+                transition: "color 0.35s ease",
+            }}>
+                {item.period}
+            </span>
         </div>
     );
 }
@@ -81,22 +110,20 @@ function SectionItem({ item, index }) {
 /* ═══════════════════════════════════════════════════════════ */
 export default function MusicPlayer() {
     const [trackIdx, setTrackIdx] = useState(0);
+    const [activeItemIdx, setActiveItemIdx] = useState(-1);
     const [isPlaying, setIsPlaying] = useState(true);
-    const [progress, setProgress] = useState(109);
+    const [progress, setProgress] = useState(0);
     const [volume, setVolume] = useState(0.6);
     const [liked, setLiked] = useState(false);
     const [airplay, setAirplay] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
-    const [scrollCycle, setScrollCycle] = useState(0); // tracks how many full loops
+    const [panelVisible, setPanelVisible] = useState(false);
 
     const section = sections[trackIdx];
     const SectionIcon = SECTION_ICONS[trackIdx];
     const progressPct = (progress / section.duration) * 100;
     const remaining = section.duration - progress;
     const intervalRef = useRef(null);
-    const hoverTlRef = useRef(null);
-    const lastIdxRef = useRef(0);
 
     /* GSAP refs */
     const sectionRef = useRef(null);
@@ -106,8 +133,8 @@ export default function MusicPlayer() {
     const progressRef = useRef(null);
     const volumeRef = useRef(null);
     const likeRef = useRef(null);
-    const containerRef = useRef(null);
     const panelRef = useRef(null);
+    const containerRef = useRef(null);
 
     /* ── Playback tick ────────────────────────────────────── */
     useEffect(() => {
@@ -128,12 +155,13 @@ export default function MusicPlayer() {
         return () => clearInterval(intervalRef.current);
     }, [isPlaying, section.duration]);
 
-    /* ── GSAP ScrollTrigger MORPH + INFINITE LOOP ─────────── */
+    /* ── GSAP ScrollTrigger ───────────────────────────────── */
     useEffect(() => {
         const ctx = gsap.context(() => {
             const hiddenEls = [progressRef.current, volumeRef.current, likeRef.current];
             gsap.set(hiddenEls, { autoAlpha: 0, display: "none" });
-            gsap.set(panelRef.current, { autoAlpha: 0, x: 40, scale: 0.95 });
+            gsap.set(panelRef.current, { autoAlpha: 0, x: 60 });
+            gsap.set(containerRef.current, { x: 0 });
             gsap.set(cardRef.current, { width: 260, borderRadius: 36, padding: "20px" });
             gsap.set(artRef.current, { width: 120, height: 120, borderRadius: 14 });
 
@@ -143,96 +171,106 @@ export default function MusicPlayer() {
                     pin: true,
                     scrub: 0.8,
                     start: "top top",
-                    end: "+=4000",
+                    end: "+=6000",
                     onUpdate: (self) => {
                         const p = self.progress;
-                        setIsExpanded(p > 0.18);
 
-                        // Morph phase: 0–0.18- (first ~720px)
-                        // After morph, cycle through sections infinitely
-                        if (p <= 0.18) {
+                        // Phase 1: morph (0 → 0.12)
+                        setIsExpanded(p > 0.12);
+
+                        // Phase 2: panel slides in (0.12 → 0.16)
+                        setPanelVisible(p > 0.14);
+
+                        // Phase 3: iterate through sections + items (0.16 → 1.0)
+                        if (p <= 0.16) {
                             setTrackIdx(0);
+                            setActiveItemIdx(-1);
                         } else {
-                            // Remaining 0.82 of range, split into repeating chunks
-                            const afterMorph = (p - 0.18) / 0.82; // 0→1 normalized
-                            // Multiply by section count to get repeating cycles
-                            const totalSections = sections.length;
-                            const cycleProgress = afterMorph * totalSections * 2; // 2 full loops
-                            const idx = Math.floor(cycleProgress) % totalSections;
-                            setTrackIdx(idx);
+                            // Remaining scroll: 0.16 → 1.0 = 0.84
+                            const contentP = (p - 0.16) / 0.84; // normalized 0→1
+
+                            // Calculate cumulative item index
+                            const globalIdx = Math.floor(contentP * totalItems);
+                            const clampedIdx = Math.min(globalIdx, totalItems - 1);
+
+                            // Find which section and item this maps to
+                            let cumulative = 0;
+                            let secIdx = 0;
+                            let itemIdx = 0;
+                            for (let i = 0; i < sections.length; i++) {
+                                if (clampedIdx < cumulative + sections[i].items.length) {
+                                    secIdx = i;
+                                    itemIdx = clampedIdx - cumulative;
+                                    break;
+                                }
+                                cumulative += sections[i].items.length;
+                            }
+
+                            setTrackIdx(secIdx);
+                            setActiveItemIdx(itemIdx);
                         }
                     },
                 },
             });
 
-            // Morph animations — compressed to first 0.18
+            // ── Phase 1: Morph (0 → 0.12) ────────────────────
             tl.to(cardRef.current, {
                 width: 340, borderRadius: 28, padding: "20px",
-                duration: 0.18, ease: "power2.inOut",
+                duration: 0.12, ease: "power2.inOut",
             }, 0);
 
             tl.to(artRef.current, {
                 width: 300, height: 300, borderRadius: 20,
-                duration: 0.18, ease: "power2.inOut",
+                duration: 0.12, ease: "power2.inOut",
             }, 0);
 
             tl.to(airplayRef.current, {
                 autoAlpha: 0, scale: 0.4,
-                duration: 0.08, ease: "power2.in",
+                duration: 0.06, ease: "power2.in",
             }, 0);
 
             tl.to(likeRef.current, {
                 display: "flex", autoAlpha: 1,
-                duration: 0.06, ease: "power2.out",
-            }, 0.1);
+                duration: 0.04, ease: "power2.out",
+            }, 0.06);
 
             tl.to(progressRef.current, {
                 display: "block", autoAlpha: 1,
-                duration: 0.06, ease: "power2.out",
-            }, 0.12);
+                duration: 0.04, ease: "power2.out",
+            }, 0.08);
 
             tl.to(volumeRef.current, {
                 display: "flex", autoAlpha: 1,
-                duration: 0.06, ease: "power2.out",
-            }, 0.15);
+                duration: 0.04, ease: "power2.out",
+            }, 0.1);
 
-            // Add a dummy tween at position 1 so the timeline extends to the full scroll range
+            // ── Phase 2: Container shifts left + Panel slides in (0.12 → 0.16)
+            tl.to(containerRef.current, {
+                x: -100,
+                duration: 0.04, ease: "power3.out",
+            }, 0.12);
+
+            tl.to(panelRef.current, {
+                autoAlpha: 1, x: 0,
+                duration: 0.04, ease: "power3.out",
+            }, 0.12);
+
+            // Dummy tween to extend timeline to full duration
             tl.to({}, { duration: 0.01 }, 1);
         }, sectionRef);
 
         return () => ctx.revert();
     }, []);
 
-    /* ── Hover animation: shift player left + reveal panel ── */
-    useEffect(() => {
-        if (!containerRef.current || !panelRef.current || !cardRef.current) return;
-
-        if (!hoverTlRef.current) {
-            hoverTlRef.current = gsap.timeline({ paused: true });
-            hoverTlRef.current
-                .to(cardRef.current, {
-                    x: -200, duration: 0.5, ease: "power3.out",
-                }, 0)
-                .to(panelRef.current, {
-                    autoAlpha: 1, x: 0, scale: 1,
-                    duration: 0.5, ease: "power3.out",
-                }, 0.08);
-        }
-
-        if (isHovered && isExpanded) {
-            hoverTlRef.current.play();
-        } else {
-            hoverTlRef.current.reverse();
-        }
-    }, [isHovered, isExpanded]);
-
     const handlePrev = () => {
         setProgress(0);
         setTrackIdx((i) => (i - 1 + sections.length) % sections.length);
+        setActiveItemIdx(0);
     };
     const handleNext = () => {
         setProgress(0);
         setTrackIdx((i) => (i + 1) % sections.length);
+        setActiveItemIdx(0);
     };
 
     const iconBtn = (active) => ({
@@ -261,13 +299,13 @@ export default function MusicPlayer() {
                 justifyContent: "center",
             }}
         >
+            {/* Main layout: player center → shifts left on scroll */}
             <div
                 ref={containerRef}
                 style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "16px",
                     position: "relative",
+                    transform: "translateX(0)",
+                    willChange: "transform",
                 }}
             >
                 {/* ── Music Player Card ──────────────────────── */}
@@ -285,15 +323,14 @@ export default function MusicPlayer() {
                         boxShadow: "0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05)",
                         fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif",
                         userSelect: "none",
-                        willChange: "width, border-radius, padding, transform",
+                        willChange: "width, border-radius, padding",
+                        flexShrink: 0,
                         zIndex: 2,
                     }}
                 >
-                    {/* Album art — per-section image */}
+                    {/* Album art — per-section */}
                     <div
                         ref={artRef}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
                         style={{
                             display: "block",
                             width: "120px",
@@ -303,22 +340,19 @@ export default function MusicPlayer() {
                             overflow: "hidden",
                             position: "relative",
                             background: "#111",
-                            cursor: isExpanded ? "pointer" : "default",
                             willChange: "width, height, border-radius",
                         }}
                     >
-                        <div
-                            style={{
-                                position: "absolute",
-                                inset: 0,
-                                width: "100%",
-                                height: "100%",
-                                backgroundImage: `url(${section.albumArt})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                transition: "background-image 0.4s ease",
-                            }}
-                        />
+                        <div style={{
+                            position: "absolute",
+                            inset: 0,
+                            width: "100%",
+                            height: "100%",
+                            backgroundImage: `url(${section.albumArt})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            transition: "background-image 0.4s ease",
+                        }} />
                     </div>
 
                     {/* AirPlay */}
@@ -359,28 +393,21 @@ export default function MusicPlayer() {
                                     <SectionIcon size={16} color="rgba(255,255,255,0.5)" />
                                     {section.title}
                                 </p>
-                                <p style={{
-                                    margin: "3px 0 0", fontSize: "14px",
-                                    color: "rgba(255,255,255,0.5)", fontWeight: 400,
-                                }}>
+                                <p style={{ margin: "3px 0 0", fontSize: "14px", color: "rgba(255,255,255,0.5)", fontWeight: 400 }}>
                                     {section.artist}
                                 </p>
                             </div>
 
-                            <button
-                                ref={likeRef}
-                                onClick={() => setLiked((l) => !l)}
-                                style={{
-                                    ...iconBtn(liked),
-                                    color: liked ? "#e74c3c" : "rgba(255,255,255,0.35)",
-                                    flexShrink: 0, marginTop: "2px",
-                                }}
-                            >
+                            <button ref={likeRef} onClick={() => setLiked((l) => !l)} style={{
+                                ...iconBtn(liked),
+                                color: liked ? "#e74c3c" : "rgba(255,255,255,0.35)",
+                                flexShrink: 0, marginTop: "2px",
+                            }}>
                                 <Heart size={22} fill={liked ? "#e74c3c" : "none"} />
                             </button>
                         </div>
 
-                        {/* Progress bar */}
+                        {/* Progress */}
                         <div ref={progressRef}>
                             <div style={{ position: "relative", height: "3px", cursor: "pointer" }}>
                                 <div style={{ position: "absolute", inset: 0, borderRadius: "2px", background: "rgba(255,255,255,0.15)" }} />
@@ -403,7 +430,7 @@ export default function MusicPlayer() {
                             </div>
                         </div>
 
-                        {/* Playback controls */}
+                        {/* Controls */}
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "24px", marginTop: "2px" }}>
                             <button style={iconBtn(true)} onClick={handlePrev} onMouseDown={press} onMouseUp={release} onMouseLeave={release}>
                                 <SkipBack size={36} fill="white" color="white" />
@@ -431,52 +458,79 @@ export default function MusicPlayer() {
                     </div>
                 </div>
 
-                {/* ── Content Panel ──────────────────────────── */}
+                {/* ── Playlist Panel (scroll-triggered) ─────── */}
                 <div
                     ref={panelRef}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
                     style={{
                         position: "absolute",
-                        left: "calc(100% - 180px)",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        width: "380px",
+                        left: "calc(100% + 24px)",
+                        top: 0,
+                        width: "340px",
                         background: "#0a0a0a",
                         borderRadius: "28px",
-                        padding: "28px 24px",
+                        overflow: "hidden",
                         boxShadow: "0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05)",
                         fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif",
                         zIndex: 1,
                         willChange: "opacity, transform",
-                        pointerEvents: isHovered && isExpanded ? "all" : "none",
+                        display: "flex",
+                        flexDirection: "column",
                     }}
                 >
+                    {/* Playlist header — album style */}
                     <div style={{
-                        display: "flex", alignItems: "center", gap: "10px",
-                        marginBottom: "8px", paddingBottom: "12px",
-                        borderBottom: "1px solid rgba(255,255,255,0.08)",
+                        padding: "20px 20px 14px",
+                        borderBottom: "1px solid rgba(255,255,255,0.06)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
                     }}>
+                        {/* Mini album art */}
                         <div style={{
-                            width: "36px", height: "36px", borderRadius: "10px",
-                            background: "rgba(255,255,255,0.06)",
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                        }}>
-                            <SectionIcon size={18} color="rgba(255,255,255,0.6)" />
-                        </div>
-                        <div>
-                            <p style={{ margin: 0, fontSize: "15px", fontWeight: 700, color: "#fff", letterSpacing: "0.03em" }}>
+                            width: "44px",
+                            height: "44px",
+                            borderRadius: "10px",
+                            overflow: "hidden",
+                            flexShrink: 0,
+                            backgroundImage: `url(${section.albumArt})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            transition: "background-image 0.4s ease",
+                        }} />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                            <p style={{
+                                margin: 0, fontSize: "15px", fontWeight: 700,
+                                color: "#fff", letterSpacing: "0.02em",
+                                transition: "all 0.3s ease",
+                            }}>
                                 {section.title}
                             </p>
-                            <p style={{ margin: "1px 0 0", fontSize: "11px", color: "rgba(255,255,255,0.35)", fontWeight: 400 }}>
-                                {section.items.length} items
+                            <p style={{
+                                margin: "2px 0 0", fontSize: "12px",
+                                color: "rgba(255,255,255,0.35)", fontWeight: 400,
+                            }}>
+                                {section.items.length} tracks · {section.artist}
                             </p>
                         </div>
+                        <SectionIcon size={18} color="rgba(255,255,255,0.3)" />
                     </div>
 
-                    <div style={{ maxHeight: "340px", overflowY: "auto" }}>
+                    {/* Playlist items */}
+                    <div style={{
+                        flex: 1,
+                        padding: "8px 6px",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                    }}>
                         {section.items.map((item, i) => (
-                            <SectionItem key={`${trackIdx}-${i}`} item={item} index={i} />
+                            <PlaylistItem
+                                key={`${trackIdx}-${i}`}
+                                item={item}
+                                index={i}
+                                isActive={i === activeItemIdx}
+                                isPlayed={i < activeItemIdx}
+                            />
                         ))}
                     </div>
                 </div>

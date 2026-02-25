@@ -7,7 +7,7 @@ export default function Home() {
       style={{
         position: "relative",
         background: "#000",
-        minHeight: "600vh",
+        minHeight: "800vh",
         overflow: "hidden",
       }}
     >
