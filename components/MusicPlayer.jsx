@@ -40,7 +40,7 @@ function PlaylistItem({ item, index, isActive, isPlayed }) {
                 alignItems: "center",
                 gap: "12px",
                 padding: "10px 14px",
-                borderRadius: "12px",
+                borderRadius: "8px",
                 background: isActive ? "rgba(255,255,255,0.08)" : "transparent",
                 transition: "all 0.35s ease",
                 opacity: isActive ? 1 : isPlayed ? 0.6 : 0.35,
@@ -137,23 +137,10 @@ export default function MusicPlayer() {
     const containerRef = useRef(null);
 
     /* ── Playback tick ────────────────────────────────────── */
+    // Removed setInterval: progress is now driven by scroll position
     useEffect(() => {
-        if (isPlaying) {
-            intervalRef.current = setInterval(() => {
-                setProgress((p) => {
-                    if (p >= section.duration) {
-                        clearInterval(intervalRef.current);
-                        setIsPlaying(false);
-                        return 0;
-                    }
-                    return p + 0.5;
-                });
-            }, 500);
-        } else {
-            clearInterval(intervalRef.current);
-        }
-        return () => clearInterval(intervalRef.current);
-    }, [isPlaying, section.duration]);
+        // We keep isPlaying state for UI toggle, but progress is externalized to scroll
+    }, [isPlaying]);
 
     /* ── GSAP ScrollTrigger ───────────────────────────────── */
     useEffect(() => {
@@ -185,29 +172,34 @@ export default function MusicPlayer() {
                         if (p <= 0.16) {
                             setTrackIdx(0);
                             setActiveItemIdx(-1);
+                            setProgress(0);
                         } else {
                             // Remaining scroll: 0.16 → 1.0 = 0.84
-                            const contentP = (p - 0.16) / 0.84; // normalized 0→1
+                            const contentP = (p - 0.16) / 0.84; // normalized 0→1 across all items
 
-                            // Calculate cumulative item index
-                            const globalIdx = Math.floor(contentP * totalItems);
-                            const clampedIdx = Math.min(globalIdx, totalItems - 1);
+                            // Exact progression across all items (e.g., 2.5 means middle of 3rd item)
+                            const globalProgress = contentP * totalItems;
+                            const clampedGlobal = Math.max(0, Math.min(globalProgress, totalItems - 0.001));
 
                             // Find which section and item this maps to
                             let cumulative = 0;
-                            let secIdx = 0;
-                            let itemIdx = 0;
                             for (let i = 0; i < sections.length; i++) {
-                                if (clampedIdx < cumulative + sections[i].items.length) {
-                                    secIdx = i;
-                                    itemIdx = clampedIdx - cumulative;
+                                const itemsInThisSection = sections[i].items.length;
+                                if (clampedGlobal < cumulative + itemsInThisSection) {
+                                    // Found the section
+                                    const indexInSec = clampedGlobal - cumulative;
+                                    const activeIdx = Math.floor(indexInSec);
+
+                                    setTrackIdx(i);
+                                    setActiveItemIdx(activeIdx);
+
+                                    // Snap progress to the item count (e.g. 2nd item / 5 total)
+                                    const itemProgress = (activeIdx + 1) / itemsInThisSection;
+                                    setProgress(itemProgress * sections[i].duration);
                                     break;
                                 }
-                                cumulative += sections[i].items.length;
+                                cumulative += itemsInThisSection;
                             }
-
-                            setTrackIdx(secIdx);
-                            setActiveItemIdx(itemIdx);
                         }
                     },
                 },
@@ -467,7 +459,7 @@ export default function MusicPlayer() {
                         top: 0,
                         width: "340px",
                         background: "#0a0a0a",
-                        borderRadius: "28px",
+                        borderRadius: "20px",
                         overflow: "hidden",
                         boxShadow: "0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05)",
                         fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif",
@@ -533,6 +525,26 @@ export default function MusicPlayer() {
                             />
                         ))}
                     </div>
+
+                    {/* Description — lyrics style */}
+                    {activeItemIdx >= 0 && section.items[activeItemIdx] && (
+                        <div style={{
+                            padding: "14px 20px 20px",
+                            borderTop: "1px solid rgba(255,255,255,0.06)",
+                        }}>
+                            <p style={{
+                                margin: 0,
+                                fontSize: "13px",
+                                color: "rgba(255,255,255,0.55)",
+                                lineHeight: 1.6,
+                                fontStyle: "italic",
+                                letterSpacing: "0.01em",
+                                transition: "all 0.4s ease",
+                            }}>
+                                {section.items[activeItemIdx].description}
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
         </section>

@@ -7,22 +7,22 @@
             "albumArt": "https://c.saavncdn.com/224/RUAB-Hindi-2023-20230804141008-500x500.jpg",
             "items": [
                 {
-                    "role": "Software Engineer",
-                    "company": "Company Name",
-                    "period": "2024 – Present",
-                    "description": "Building production-grade web applications and APIs"
+                    "role": "Software Development Engineer Intern",
+                    "company": "Sylo Energy (Remote)",
+                    "period": "Jul 2025 – Oct 2025",
+                    "description": "Built a full-stack auditing portal with Next.js and Express, deployed on AWS EC2 with Nginx; unified drone thermography and barcode workflows into a single dashboard for plants with 5L+ modules and developed an offline-first Android field app"
                 },
                 {
-                    "role": "Frontend Developer",
-                    "company": "Previous Co.",
-                    "period": "2023 – 2024",
-                    "description": "Designed and shipped modern React interfaces"
+                    "role": "Full Stack Developer",
+                    "company": "Nexus BMU",
+                    "period": "Jun 2025 – Present",
+                    "description": "Architected scalable React components for the university community platform and refactored legacy backend APIs to improve response times and database efficiency"
                 },
                 {
-                    "role": "Freelance Developer",
-                    "company": "Self-employed",
-                    "period": "2022 – 2023",
-                    "description": "Full-stack projects for startups and small businesses"
+                    "role": "Executive Committee Member",
+                    "company": "ACM BMU Student Chapter",
+                    "period": "Nov 2024 – Jun 2025",
+                    "description": "Led technical infrastructure for hackedBMU and hacked7.0 hackathons and maintained production codebases for Glitch events like DevDash, Duality Extended, and EmojiExplorer"
                 }
             ]
         },
@@ -33,22 +33,22 @@
             "albumArt": "https://i.scdn.co/image/ab67616d0000b27325c28f3c9fbdbab1a88dd619",
             "items": [
                 {
-                    "role": "Personal Website",
-                    "company": "Next.js + GSAP",
-                    "period": "2024",
-                    "description": "This portfolio site with morphing music player navigation"
+                    "role": "Railgun",
+                    "company": "Node.js + WebRTC + Cryptography",
+                    "period": "2025",
+                    "description": "Decentralized encrypted peer-to-peer database with Ed25519 identity, Merkle Trie storage, and a WebRTC sync engine for deterministic offline-first conflict resolution"
                 },
                 {
-                    "role": "E-Commerce Platform",
-                    "company": "React + Node.js",
+                    "role": "Artifact",
+                    "company": "Svelte + GunDB + Framework7",
                     "period": "2024",
-                    "description": "Full-stack marketplace with payment integration"
+                    "description": "Censorship-resistant decentralized news platform using a graph database with optimized peer synchronization for distributed availability"
                 },
                 {
-                    "role": "AI Dashboard",
-                    "company": "Python + React",
-                    "period": "2023",
-                    "description": "Real-time analytics with ML-powered insights"
+                    "role": "AgroChain",
+                    "company": "Solidity + Ethereum + Hardhat",
+                    "period": "2024",
+                    "description": "Blockchain-based batch tracking system with gas-optimized smart contracts, role-based access control, and a full Hardhat test suite on Sepolia"
                 }
             ]
         },
