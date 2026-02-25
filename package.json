@@ -20,5 +20,6 @@
     "@tailwindcss/postcss": "^4.2.1",
     "babel-plugin-react-compiler": "1.0.0",
     "tailwindcss": "^4.2.1"
-  }
+  },
+  "packageManager": "pnpm@10.30.2"
 }
