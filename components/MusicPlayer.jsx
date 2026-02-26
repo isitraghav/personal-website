@@ -193,9 +193,12 @@ export default function MusicPlayer() {
                                     setTrackIdx(i);
                                     setActiveItemIdx(activeIdx);
 
-                                    // Snap progress to the item count (e.g. 2nd item / 5 total)
-                                    const itemProgress = (activeIdx + 1) / itemsInThisSection;
-                                    setProgress(itemProgress * sections[i].duration);
+                                    // Smooth progress: interpolate within each item's range
+                                    const fractional = indexInSec - activeIdx; // 0→1 within current item
+                                    const itemStart = activeIdx / itemsInThisSection;
+                                    const itemEnd = (activeIdx + 1) / itemsInThisSection;
+                                    const smoothProgress = itemStart + fractional * (itemEnd - itemStart);
+                                    setProgress(smoothProgress * sections[i].duration);
                                     break;
                                 }
                                 cumulative += itemsInThisSection;

@@ -88,17 +88,18 @@ const MediaBetweenText = forwardRef(function MediaBetweenText(
                 className={mediaContainerClassName}
                 initial={variants.initial}
                 animate={shouldReveal ? variants.animate : variants.initial}
-                style={{ overflow: "hidden", flexShrink: 0 }}
+                style={{ overflow: "hidden", flexShrink: 0, minWidth: 0, display: "flex", alignItems: "center", whiteSpace: "nowrap" }}
             >
+                <span>(</span>
                 {mediaType === "image" ? (
                     <img
                         src={mediaUrl}
                         alt={alt}
                         style={{
-                            width: "100%",
                             height: "100%",
                             objectFit: "cover",
                             display: "block",
+                            flexShrink: 0,
                         }}
                     />
                 ) : (
@@ -110,13 +111,14 @@ const MediaBetweenText = forwardRef(function MediaBetweenText(
                         muted={muted}
                         playsInline={playsInline}
                         style={{
-                            width: "100%",
                             height: "100%",
                             objectFit: "cover",
                             display: "block",
+                            flexShrink: 0,
                         }}
                     />
                 )}
+                <span>)</span>
             </motion.div>
 
             <motion.span layout className={rightTextClassName}>

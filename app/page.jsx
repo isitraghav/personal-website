@@ -1,6 +1,7 @@
 import Glaze from "../components/Glaze";
 import MusicPlayer from "../components/MusicPlayer";
 import HeroSection from "../components/HeroSection";
+import TextTransition from "../components/TextTransition";
 import Footer from "../components/Footer";
 
 export default function Home() {
@@ -8,6 +9,9 @@ export default function Home() {
     <div className="w-full">
       {/* Hero — static, solid black bg, no Glaze */}
       <HeroSection />
+
+      {/* Scroll transition text */}
+      <TextTransition />
 
       {/* Glaze + MusicPlayer wrapper — Glaze sticks while MusicPlayer scrolls */}
       <div className="relative">
