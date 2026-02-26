@@ -1,9 +1,38 @@
 "use client";
+import { useRef, useEffect } from "react";
 import MediaBetweenText from "./MediaBetweenText";
-import { useRef } from "react";
 
 export default function HeroSection() {
     const mediaRef = useRef(null);
+    const isHovered = useRef(false);
+
+    useEffect(() => {
+        const threshold = window.innerHeight * 0.25;
+
+        const handleScroll = () => {
+            if (window.scrollY > threshold) {
+                mediaRef.current?.animate();
+            } else if (!isHovered.current) {
+                mediaRef.current?.reset();
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const handleMouseEnter = () => {
+        isHovered.current = true;
+        mediaRef.current?.animate();
+    };
+
+    const handleMouseLeave = () => {
+        isHovered.current = false;
+        // Only close if scroll hasn't revealed it
+        if (window.scrollY <= window.innerHeight * 0.25) {
+            mediaRef.current?.reset();
+        }
+    };
 
     const textStyle = {
         fontFamily: "var(--font-playfair), serif",
@@ -29,8 +58,8 @@ export default function HeroSection() {
             }}
         >
             <div
-                onMouseEnter={() => mediaRef.current?.animate()}
-                onMouseLeave={() => mediaRef.current?.reset()}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
                 style={{
                     display: "flex",
                     flexDirection: "column",

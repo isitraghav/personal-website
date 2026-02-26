@@ -9,7 +9,7 @@ export default function Footer() {
             <div className="relative overflow-hidden w-full h-full flex justify-end px-8 sm:px-12 text-right items-start py-10 sm:py-12">
                 {/* Navigation columns */}
                 <div className="flex flex-row gap-10 sm:gap-16 md:gap-24 text-sm sm:text-base md:text-lg font-sans z-10">
-                    <ul className="space-y-2 text-white/70">
+                    {/* <ul className="space-y-2 text-white/70">
                         <li className="text-white font-bold uppercase text-xs tracking-widest mb-3">
                             Navigate
                         </li>
@@ -20,15 +20,10 @@ export default function Footer() {
                         </li>
                         <li>
                             <a href="#" className="hover:text-white transition-colors duration-200">
-                                Projects
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" className="hover:text-white transition-colors duration-200">
                                 About
                             </a>
                         </li>
-                    </ul>
+                    </ul> */}
                     <ul className="space-y-2 text-white/70">
                         <li className="text-white font-bold uppercase text-xs tracking-widest mb-3">
                             Socials
@@ -45,7 +40,7 @@ export default function Footer() {
                         </li>
                         <li>
                             <a
-                                href="https://instagram.com"
+                                href="https://instagram.com/isitraghav"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="hover:text-white transition-colors duration-200"
@@ -55,12 +50,12 @@ export default function Footer() {
                         </li>
                         <li>
                             <a
-                                href="https://x.com"
+                                href="https://x.com/isitraghav"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="hover:text-white transition-colors duration-200"
                             >
-                                X (Twitter)
+                                X
                             </a>
                         </li>
                     </ul>
