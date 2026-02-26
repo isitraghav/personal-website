@@ -1,42 +1,9 @@
 "use client";
-import { useRef, useEffect } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import MediaBetweenText from "./MediaBetweenText";
 
 export default function HeroSection() {
-    const sectionRef = useRef(null);
-    const textRef = useRef(null);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.set(textRef.current, { scale: 1, opacity: 1 });
-
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    pin: true,
-                    scrub: 0.6,
-                    start: "top top",
-                    end: "+=1200",
-                },
-            });
-
-            tl.to(textRef.current, {
-                scale: 45, // Slightly deeper zoom
-                opacity: 0,
-                duration: 1.5,
-                ease: "expo.inOut",
-            }, 0);
-        }, sectionRef);
-
-        return () => ctx.revert();
-    }, []);
-
     return (
         <section
-            ref={sectionRef}
             style={{
                 width: "100%",
                 height: "100vh",
@@ -44,41 +11,45 @@ export default function HeroSection() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                background: "transparent",
+                background: "#000",
                 overflow: "hidden",
-                // Removing isolation factors
-                isolation: "auto",
             }}
         >
             <div
-                ref={textRef}
                 style={{
-                    willChange: "transform, opacity",
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    background: "transparent",
                 }}
             >
-                <h1
-                    style={{
-                        margin: 0,
-                        // Reference the CSS variable from layout.js
-                        fontFamily: "var(--font-akira), sans-serif",
-                        fontSize: "clamp(80px, 15vw, 220px)",
-                        fontWeight: "normal",
-                        letterSpacing: "0.15em",
-                        textTransform: "uppercase",
-                        lineHeight: 1,
-                        color: "#fff",
-                        // Exclusion or difference for inversion effect
-                        mixBlendMode: "exclusion",
-                        pointerEvents: "none",
-                        userSelect: "none",
+                <MediaBetweenText
+                    firstText="Hi  ("
+                    secondText=") I'm Raghav"
+                    mediaUrl="/raghav.jpeg"
+                    mediaType="image"
+                    alt="Raghav"
+                    triggerType="hover"
+                    mediaContainerClassName="rounded-lg overflow-hidden"
+                    className="flex flex-row items-center justify-center cursor-pointer"
+                    leftTextClassName="text-white pointer-events-none select-none"
+                    rightTextClassName="text-white pointer-events-none select-none"
+                    animationVariants={{
+                        initial: { width: 0, opacity: 0 },
+                        animate: {
+                            width: "100px",
+                            opacity: 1,
+                            transition: { duration: 0.4, type: "spring", bounce: 0 },
+                        },
                     }}
-                >
-                    RAGHAV
-                </h1>
+                    style={{
+                        fontFamily: "var(--font-playfair), serif",
+                        fontSize: "clamp(2rem, 5vw, 5rem)",
+                        fontWeight: "normal",
+                        textTransform: "none",
+                        lineHeight: 1,
+                    }}
+                />
             </div>
         </section>
     );

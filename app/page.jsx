@@ -1,41 +1,50 @@
 import Glaze from "../components/Glaze";
 import MusicPlayer from "../components/MusicPlayer";
 import HeroSection from "../components/HeroSection";
+import Footer from "../components/Footer";
 
 export default function Home() {
   return (
-    <main
-      style={{
-        position: "relative",
-        background: "transparent",
-        minHeight: "1000vh",
-        overflow: "hidden",
-      }}
-    >
-      {/* Glaze bg — fixed, at the bottom of the stack */}
-      <div
-        style={{
-          position: "fixed",
-          top: "40px",
-          left: "40px",
-          right: "40px",
-          bottom: "40px",
-          borderRadius: "24px",
-          overflow: "hidden",
-          pointerEvents: "none",
-          zIndex: -1, // Ensure it's behind everything
-        }}
-      >
-        <Glaze />
-      </div>
-
-      {/* Hero Section */}
+    <div className="w-full">
+      {/* Hero — static, solid black bg, no Glaze */}
       <HeroSection />
 
-      {/* Music player + portfolio navigation */}
-      <div style={{ position: "relative", zIndex: 10 }}>
-        <MusicPlayer />
+      {/* Glaze + MusicPlayer wrapper — Glaze sticks while MusicPlayer scrolls */}
+      <div className="relative">
+        {/* Glaze bg — sticky, stays pinned during MusicPlayer animations */}
+        <div
+          className="sticky top-0 z-0"
+          style={{
+            height: "100vh",
+            pointerEvents: "none",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: "40px",
+              left: "40px",
+              right: "40px",
+              bottom: "40px",
+              borderRadius: "24px",
+              overflow: "hidden",
+            }}
+          >
+            <Glaze />
+          </div>
+        </div>
+
+        {/* MusicPlayer overlaps the Glaze, sits above it */}
+        <div
+          className="relative z-10"
+          style={{ marginTop: "-100vh" }}
+        >
+          <MusicPlayer />
+        </div>
       </div>
-    </main>
+
+      {/* Footer */}
+      <Footer />
+    </div>
   );
 }

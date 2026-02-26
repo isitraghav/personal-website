@@ -7,7 +7,7 @@
             "albumArt": "https://c.saavncdn.com/224/RUAB-Hindi-2023-20230804141008-500x500.jpg",
             "items": [
                 {
-                    "role": "Software Development Engineer Intern",
+                    "role": "SDE Intern",
                     "company": "Sylo Energy (Remote)",
                     "period": "Jul 2025 – Oct 2025",
                     "description": "Built a full-stack auditing portal with Next.js and Express, deployed on AWS EC2 with Nginx; unified drone thermography and barcode workflows into a single dashboard for plants with 5L+ modules and developed an offline-first Android field app"
