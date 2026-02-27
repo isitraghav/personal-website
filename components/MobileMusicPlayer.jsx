@@ -316,9 +316,8 @@ export default function MobileMusicPlayer() {
                 width: "100%",
                 height: "100vh",
                 display: "flex",
-                alignItems: "flex-start", // align top so the container margin shifts from the top
+                alignItems: "center", // Vertically center the container
                 justifyContent: "center",
-                paddingTop: "20px",       // spacing from top edge when fully scrolled up
             }}
         >
             {/* Main layout: wrapper for vertical stacking on mobile */}
