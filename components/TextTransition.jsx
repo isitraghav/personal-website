@@ -10,6 +10,8 @@ export default function TextTransition() {
     const textRef = useRef(null);
 
     useEffect(() => {
+        const isMobile = window.innerWidth < 640;
+
         const ctx = gsap.context(() => {
             gsap.set(textRef.current, { opacity: 0, y: 40 });
 
@@ -19,7 +21,7 @@ export default function TextTransition() {
                     pin: true,
                     scrub: 0.6,
                     start: "top top",
-                    end: "+=1200",
+                    end: isMobile ? "+=800" : "+=1200",
                 },
             });
 
@@ -77,7 +79,7 @@ export default function TextTransition() {
                     alignItems: "center",
                     justifyContent: "center",
                     gap: "16px",
-                    padding: "0 24px",
+                    padding: "0 clamp(16px, 5vw, 24px)",
                     maxWidth: "800px",
                 }}
             >

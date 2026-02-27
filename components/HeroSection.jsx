@@ -60,6 +60,8 @@ export default function HeroSection() {
             <div
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                onTouchStart={handleMouseEnter}
+                onTouchEnd={handleMouseLeave}
                 style={{
                     display: "flex",
                     flexDirection: "column",
@@ -76,7 +78,7 @@ export default function HeroSection() {
                     mediaType="image"
                     alt="Raghav"
                     triggerType="ref"
-                    mediaContainerClassName="rounded-lg overflow-hidden h-[100px] sm:h-[120px]"
+                    mediaContainerClassName="rounded-lg overflow-hidden h-[60px] sm:h-[100px] md:h-[120px]"
                     className="flex flex-row items-center justify-center gap-2"
                     leftTextClassName="text-white select-none"
                     rightTextClassName="text-white select-none"
