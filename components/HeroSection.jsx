@@ -42,6 +42,8 @@ export default function HeroSection() {
         lineHeight: 1.2,
         color: "#fff",
         textAlign: "center",
+        width: "100%",
+        justifyContent: "center",
     };
 
     return (
@@ -68,18 +70,20 @@ export default function HeroSection() {
                     alignItems: "center",
                     justifyContent: "center",
                     cursor: "pointer",
+                    width: "100%",
+                    textAlign: "center",
                 }}
             >
                 <MediaBetweenText
                     ref={mediaRef}
-                    firstText="Hi"
+                    firstText="Hi,"
                     secondText="I'm Raghav"
                     mediaUrl="/raghav2.jpeg"
                     mediaType="image"
                     alt="Raghav"
                     triggerType="ref"
                     mediaContainerClassName="rounded-lg overflow-hidden h-[60px] sm:h-[100px] md:h-[120px]"
-                    className="flex flex-row items-center justify-center gap-2"
+                    className="flex flex-wrap items-center justify-center gap-2 text-center"
                     leftTextClassName="text-white select-none"
                     rightTextClassName="text-white select-none"
                     animationVariants={{

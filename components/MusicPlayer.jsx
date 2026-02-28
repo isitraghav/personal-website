@@ -240,8 +240,9 @@ export default function MusicPlayer() {
             }, 0.1);
 
             // ── Phase 2: Container shifts left + Panel slides in (0.12 → 0.16)
+            // Shift = (panelWidth + gap) / 2 = (340 + 24) / 2 = 182 to keep combined layout centered
             tl.to(containerRef.current, {
-                x: -100,
+                x: -182,
                 duration: 0.04, ease: "power3.out",
             }, 0.12);
 

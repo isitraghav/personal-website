@@ -22,8 +22,8 @@ const calendas = localFont({
 });
 
 export const metadata = {
-  title: "Raghav | Portfolio",
-  description: "Personal portfolio of Raghav",
+  title: "Raghav",
+  description: "",
 };
 
 export default function RootLayout({ children }) {
