@@ -84,7 +84,7 @@ export default function TextTransition() {
                 }}
             >
                 <p style={{ ...textStyle, margin: 0, fontSize: "clamp(1.5rem, 4vw, 3.5rem)" }}>
-                    i have been engineering software for a while now
+                    I have been engineering software for a while now
                 </p>
                 <p
                     style={{
